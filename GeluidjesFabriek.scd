@@ -77,7 +77,7 @@ s.waitForBoot({
 
 	// ------- OSC responders ------------------------------------------------------------------------------------------------------------------------
 
-	respTrigger = OSCresponderNode(s.addr, '/tr', {arg time, resp, msg;
+	OSCdef(\fabriekTrigger, {arg time, resp, msg;
 		if(timeOut == 0, {
 			"\n### Triggering".postln;
 			timeOut = 1; {timeOut = 0}.defer(cfg.timeOutReset);
@@ -99,7 +99,7 @@ s.waitForBoot({
 				;
 			}.defer();
 		}, {"\n### No triggering because of time-out".postln});
-	}).add;
+	}, '/tr').fix;
 
 	// ------- functions ------------------------------------------------------------------------------------------------------------------------
 
@@ -1050,7 +1050,7 @@ s.waitForBoot({
 		cfg.localAddr.disconnect;
 		task.stop;
 		if(cfg.autoTrigger == 1, {tAutoTrigger.stop});
-		respTrigger.remove;
+		OSCdef(\fabriekTrigger).free;
 		cfg.localAddr.sendMsg("/midi/control", 15 - 1, 4, 0, "MUL");
 		cfg.localAddr.sendMsg("/midi/control", 12 - 1, 0, 0, "MUL");
 		if(triggerSynth.notNil, {triggerSynth.free});

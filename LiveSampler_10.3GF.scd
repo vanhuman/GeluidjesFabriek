@@ -3223,10 +3223,10 @@ s.waitForBoot({
 
 	///////////////////////////////////////////// other OSC responders //////////////////////////////////////
 	// responder to handle SendTrig from the server
-	respSendTrig = OSCresponderNode(s.addr, '/tr', {
+	OSCdef(\sendTriggerLiveSampler, {
 		arg time, resp, msg;
 		// msg.postln;
-	}).add;
+	}, '/tr').fix;
 
 	// responder to handle playhead, startpos and len messages from the server
 	respPlayHead = OSCresponderNode(s.addr, 'playHead', {
@@ -4007,7 +4007,7 @@ s.waitForBoot({
 
 	// collect garbage
 	~wLiveSampler.onClose_({
-		respSendTrig.remove;
+		OSCdef(\sendTriggerLiveSampler).free;
 		respPlayHead.remove;
 		respBufferViewRefresh.remove;
 		respCTR.remove;
